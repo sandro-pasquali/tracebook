@@ -6,6 +6,10 @@ Tracebook builds a repository-specific hybrid index that combines source chunks,
 
 The first time a repository is selected, its runtime discovers the eligible corpus, acquires or loads the configured local search models, opens the LanceDB store, and indexes the source. The browser shows each startup stage and blocks questions until the runtime is ready.
 
+![Tracebook indexing overlay showing repository path, progress, and corpus counts](images/product-walkthrough/03-indexing-progress.png)
+
+*The startup overlay exposes what Tracebook is preparing instead of leaving readiness implicit.*
+
 Later runs reuse stored rows. Per-file content hashes avoid parsing and embedding unchanged files, while the watcher incrementally handles additions, changes, and removals. A burst of edits is debounced and store optimization is deferred until writes settle.
 
 Index, trace, story, and change-brief state is isolated under:

@@ -218,6 +218,10 @@ This is a local-process boundary, not a multi-user authentication system. A proc
 
 The server streams semantic component data rather than server-rendered HTML. The browser maps component kinds to custom elements, renders Mermaid with the bundled library, highlights source with the bundled syntax highlighter, and opens source through a tokenized same-origin endpoint.
 
+![Expanded source viewer showing the cited range highlighted inside its full file](images/product-walkthrough/09-source-view.png)
+
+*The source viewer keeps generated explanation reversible to the repository lines that support it.*
+
 Expanded code views always begin with the cited excerpt highlighted. `Copy Image` is therefore immediately usable: it exports that cited range unless the user makes another selection. The image renderer measures and wraps syntax-highlighted tokens, applies the active Tracebook palette, paints a high-resolution Canvas, and writes the resulting PNG to the clipboard or offers a local download fallback.
 
 Transformers.js is used only for text embeddings and text reranking. Because its Node entry imports Sharp even for text-only workloads, the root dependency resolution substitutes the small guard in `vendor/sharp-text-only`. The guard preserves the expected import shape and throws on image-pipeline use, avoiding an unused Sharp/libvips installation without pretending to implement image processing.

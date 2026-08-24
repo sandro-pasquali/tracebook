@@ -87,6 +87,10 @@ This is the central trust model: the language model may organize and explain the
 
 The interface follows the same rule. It uses qualitative states such as grounded, inferred, and coverage gap rather than presenting an artificial numeric confidence score as certainty. Source chips and full-file views let the reader move from an explanation back to the underlying material.
 
+![A Tracebook evidence callout marked grounded in source with its cited range](images/product-walkthrough/08-evidence-callout.png)
+
+*Evidence categories stay next to the claim and its source rather than disappearing into generation metadata.*
+
 ## Network Last, with Premier Models as an Option
 
 Tracebook is designed around local ownership of project context and a network-last execution model. Network-last is an ordering principle, not a prohibition: use the user's machine for durable state and computation where it is effective, then use a network model deliberately for work where its capability justifies the cost and data boundary.

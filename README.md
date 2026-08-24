@@ -2,6 +2,10 @@
 
 Tracebook turns a codebase into source-grounded product stories: readable explanations, diagrams, and annotated code backed by the files in the repository.
 
+[![A completed Tracebook story with a readable narrative, source coverage, citations, and a sequence diagram](docs/images/product-walkthrough/05-source-grounded-story.png)](docs/product-walkthrough.md)
+
+*Ask a product question. Get a readable story grounded in repository evidence. [See the complete product walkthrough.](docs/product-walkthrough.md)*
+
 Its working thesis is:
 
 > Help me understand the product story well enough to ask an LLM for the right change without breaking something important.
@@ -20,7 +24,20 @@ A question becomes a chapter in a persistent story rather than another disposabl
 - explicit coverage gaps when the repository does not support a claim; and
 - source links that open the full file at the cited range.
 
+| Follow behavior across boundaries | Inspect the exact source |
+| --- | --- |
+| [![A Tracebook sequence diagram backed by cited source ranges](docs/images/product-walkthrough/06-sequence-diagram.png)](docs/product-walkthrough.md#6-follow-behavior-across-boundaries-with-diagrams) | [![A Tracebook annotated code excerpt with line-level explanation](docs/images/product-walkthrough/07-annotated-code.png)](docs/product-walkthrough.md#7-inspect-annotated-source) |
+| Diagrams turn multi-file behavior into a shared visual model without losing its citations. | Verbatim excerpts let readers understand the behavior and verify it against numbered source lines. |
+
 Stories can continue through follow-up questions, be reopened from the story library, identify cited source that has changed, regenerate against the current repository, and produce a structured change brief. Expanded source can also be copied as a themed PNG rendered entirely in the browser.
+
+<p align="center">
+  <a href="docs/product-walkthrough.md#11-review-and-copy-the-change-brief">
+    <img src="docs/images/product-walkthrough/11-change-brief.png" width="700" alt="A generated Tracebook Change Brief with likely files, acceptance criteria, risks, and copyable repository issue">
+  </a>
+</p>
+
+<p align="center"><em>Turn source-grounded understanding into a structured handoff for an engineer or coding model.</em></p>
 
 At a high level, Tracebook keeps the path from source to explanation explicit:
 

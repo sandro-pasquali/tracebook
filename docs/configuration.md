@@ -10,6 +10,10 @@ yarn dev
 
 Open `/admin` at the local URL printed by Vite. The first saved configuration enables the repository picker and runtime.
 
+![Admin Setup showing configured repositories, model roles, and provider controls](images/product-walkthrough/01-admin-setup.png)
+
+*Admin Setup keeps the repository boundary and model routing visible in one product surface.*
+
 ## Configuration and Credentials
 
 Non-secret settings are stored at:
