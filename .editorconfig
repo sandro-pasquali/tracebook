@@ -1,0 +1,17 @@
+# Keep editors aligned with the repo's style so format-on-save does not fight
+# `yarn lint` (xo). JS is 4-space (xo's `space: 4`); JSON is standard 2-space.
+# Editors honor this natively, and prettier reads it too (indent_size -> tabWidth).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+[*.{js,mjs,cjs}]
+indent_style = space
+indent_size = 4
+
+[*.json]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,112 @@
+{
+    "version": 1,
+    "savedAt": "2026-06-12T14:54:05.097Z",
+    "gitRev": "e35f8c9",
+    "conditions": {
+        "kind": "generation",
+        "repo": "tracebook-enriched",
+        "caseCount": 49,
+        "casesHash": "c999b0e75af2d450",
+        "embeddings": {
+            "model": "Xenova/all-MiniLM-L6-v2",
+            "dims": 384,
+            "dtype": "fp32",
+            "queryPrefix": "",
+            "docPrefix": ""
+        },
+        "enrichment": {
+            "enabled": true,
+            "model": "ollama/qwen3-coder:30b"
+        },
+        "rerank": {
+            "enabled": true,
+            "model": "Xenova/bge-reranker-base"
+        },
+        "models": {
+            "exploration": "ollama/qwen3-coder:30b",
+            "synthesis": "ollama/qwen3-coder:30b",
+            "outline": "ollama/qwen3-coder:30b",
+            "hyde": "ollama/qwen3-coder:30b",
+            "annotation": "ollama/qwen3-coder:30b"
+        }
+    },
+    "metrics": {
+        "types": {
+            "all": {
+                "cite": 0.5714,
+                "faith": 1,
+                "ground": 0.9282,
+                "evid": 0.9282,
+                "gap": 0,
+                "err": 0,
+                "shape": 0,
+                "weakCallouts": 0,
+                "dupCo": 0.0481,
+                "coPerExc": 3.8,
+                "spine": null,
+                "judge": null,
+                "n": 49
+            },
+            "product": {
+                "cite": 0.6667,
+                "faith": 1,
+                "ground": 0.8932,
+                "evid": 0.8932,
+                "gap": 0,
+                "err": 0,
+                "shape": null,
+                "weakCallouts": 0,
+                "dupCo": 0.048,
+                "coPerExc": 3.8462,
+                "spine": null,
+                "judge": null,
+                "n": 18
+            },
+            "identifier": {
+                "cite": 0.1429,
+                "faith": null,
+                "ground": 1,
+                "evid": 1,
+                "gap": 0,
+                "err": 0,
+                "shape": 0,
+                "weakCallouts": null,
+                "dupCo": null,
+                "coPerExc": null,
+                "spine": null,
+                "judge": null,
+                "n": 14
+            },
+            "leaky": {
+                "cite": 0.8182,
+                "faith": 1,
+                "ground": 0.9773,
+                "evid": 0.9773,
+                "gap": 0,
+                "err": 0,
+                "shape": null,
+                "weakCallouts": 0,
+                "dupCo": 0,
+                "coPerExc": 3.7692,
+                "spine": null,
+                "judge": null,
+                "n": 11
+            },
+            "integration": {
+                "cite": 0.8333,
+                "faith": 1,
+                "ground": 0.9412,
+                "evid": 0.9412,
+                "gap": 0,
+                "err": 0,
+                "shape": null,
+                "weakCallouts": 0,
+                "dupCo": 0.0337,
+                "coPerExc": 3.7083,
+                "spine": null,
+                "judge": null,
+                "n": 6
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+[
+    {"type": "overview", "question": "How does this codebase work?", "expect": ["src/flask/app.py", "src/flask/ctx.py", "src/flask/sansio/app.py"]},
+    {"type": "overview", "question": "Give me a high level overview of this project end to end", "expect": ["src/flask/app.py", "src/flask/sansio/app.py"]}
+]

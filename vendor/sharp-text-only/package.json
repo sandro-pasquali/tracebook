@@ -1,0 +1,10 @@
+{
+  "name": "sharp",
+  "version": "0.34.5",
+  "private": true,
+  "description": "Text-only guard used in place of Transformers.js' unused Sharp dependency.",
+  "type": "commonjs",
+  "main": "index.cjs",
+  "exports": "./index.cjs",
+  "license": "AGPL-3.0-only"
+}

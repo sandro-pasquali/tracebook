@@ -1,0 +1,8 @@
+# Tracebook: folders to skip when indexing this repo (gitignore syntax).
+scripts/
+src/language-integrations/
+src/fixtures/
+src/tools/*
+#search describes system behavior beyond the other tools
+!src/tools/search.js
+test/

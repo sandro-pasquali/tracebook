@@ -1,0 +1,328 @@
+{
+    "version": 1,
+    "savedAt": "2026-06-12T14:15:30.116Z",
+    "gitRev": "e35f8c9",
+    "conditions": {
+        "kind": "retrieval",
+        "repo": "tracebook-enriched",
+        "k": 6,
+        "caseCount": 49,
+        "casesHash": "c999b0e75af2d450",
+        "embeddings": {
+            "model": "Xenova/all-MiniLM-L6-v2",
+            "dims": 384,
+            "dtype": "fp32",
+            "queryPrefix": "",
+            "docPrefix": ""
+        },
+        "enrichment": {
+            "enabled": true,
+            "model": "ollama/qwen3-coder:30b"
+        },
+        "rerankModel": "Xenova/bge-reranker-base",
+        "queryShapeArm": "lexical-for-product"
+    },
+    "metrics": {
+        "ladder": {
+            "vector": {
+                "all": {
+                    "recall": 0.6327,
+                    "mrr": 0.4701,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.5556,
+                    "mrr": 0.4352,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.4286,
+                    "mrr": 0.3095,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 1,
+                    "mrr": 0.6697,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.6667,
+                    "mrr": 0.5833,
+                    "n": 6
+                }
+            },
+            "+lexical": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.567,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.7222,
+                    "mrr": 0.4278,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.6429,
+                    "mrr": 0.5179,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.9091,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.6667,
+                    "mrr": 0.4722,
+                    "n": 6
+                }
+            },
+            "+graph": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.567,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.7222,
+                    "mrr": 0.4278,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.6429,
+                    "mrr": 0.5179,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.9091,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.6667,
+                    "mrr": 0.4722,
+                    "n": 6
+                }
+            },
+            "+domain": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.5534,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.5,
+                    "mrr": 0.3102,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.8571,
+                    "mrr": 0.6548,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.7879,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.8333,
+                    "mrr": 0.6167,
+                    "n": 6
+                }
+            },
+            "+rerank": {
+                "all": {
+                    "recall": 0.7551,
+                    "mrr": 0.5942,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.5,
+                    "mrr": 0.3861,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 1,
+                    "mrr": 0.6905,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.8182,
+                    "mrr": 0.7727,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.8333,
+                    "mrr": 0.6667,
+                    "n": 6
+                }
+            }
+        },
+        "loo": {
+            "full": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.5901,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.4444,
+                    "mrr": 0.375,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 1,
+                    "mrr": 0.6905,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.8182,
+                    "mrr": 0.7727,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.8333,
+                    "mrr": 0.6667,
+                    "n": 6
+                }
+            },
+            "-lexical": {
+                "all": {
+                    "recall": 0.7959,
+                    "mrr": 0.5633,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.7222,
+                    "mrr": 0.388,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.8571,
+                    "mrr": 0.6845,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.7909,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.6667,
+                    "mrr": 0.3889,
+                    "n": 6
+                }
+            },
+            "-graph": {
+                "all": {
+                    "recall": 0.7551,
+                    "mrr": 0.5925,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.5,
+                    "mrr": 0.3861,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 1,
+                    "mrr": 0.6845,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.8182,
+                    "mrr": 0.7727,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.8333,
+                    "mrr": 0.6667,
+                    "n": 6
+                }
+            },
+            "-domain": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.5748,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.6111,
+                    "mrr": 0.4167,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.7857,
+                    "mrr": 0.5952,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.803,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.6667,
+                    "mrr": 0.5833,
+                    "n": 6
+                }
+            },
+            "-rerank": {
+                "all": {
+                    "recall": 0.7347,
+                    "mrr": 0.5534,
+                    "n": 49
+                },
+                "product": {
+                    "recall": 0.5,
+                    "mrr": 0.3102,
+                    "n": 18
+                },
+                "identifier": {
+                    "recall": 0.8571,
+                    "mrr": 0.6548,
+                    "n": 14
+                },
+                "leaky": {
+                    "recall": 0.9091,
+                    "mrr": 0.7879,
+                    "n": 11
+                },
+                "integration": {
+                    "recall": 0.8333,
+                    "mrr": 0.6167,
+                    "n": 6
+                }
+            }
+        },
+        "policy": {
+            "all": {
+                "recall": 0.8367,
+                "mrr": 0.6197,
+                "n": 49
+            },
+            "product": {
+                "recall": 0.7222,
+                "mrr": 0.4278,
+                "n": 18
+            },
+            "identifier": {
+                "recall": 1,
+                "mrr": 0.6905,
+                "n": 14
+            },
+            "leaky": {
+                "recall": 0.8182,
+                "mrr": 0.8182,
+                "n": 11
+            },
+            "integration": {
+                "recall": 0.8333,
+                "mrr": 0.6667,
+                "n": 6
+            }
+        }
+    }
+}

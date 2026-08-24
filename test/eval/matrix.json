@@ -1,0 +1,6 @@
+[
+    {"name": "tracebook", "root": ".", "cases": null},
+    {"name": "flask", "root": "../../github/flask", "cases": "test/eval/cases-flask.json", "overviewCases": "test/eval/cases-flask-overview.json"},
+    {"name": "tracebook-enriched", "root": ".", "cases": null, "setup": "./test/eval/setup-enriched-env.js"},
+    {"name": "flask-enriched", "root": "../../github/flask", "cases": "test/eval/cases-flask.json", "overviewCases": "test/eval/cases-flask-overview.json", "setup": "./test/eval/setup-enriched-env.js"}
+]
