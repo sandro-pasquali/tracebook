@@ -56,11 +56,13 @@ test.group('block rendering', () => {
         assert.notEqual(after, before);
     });
 
-    test('copies the highlighted source excerpt by default and lets a text selection override it', async ({visit, assert}) => {
+    test('chooses a light or dark image and lets a text selection override the cited excerpt', async ({visit, assert}) => {
         const page = await openApp(visit);
         await page.evaluate(() => {
             window.__clipboardWrites = [];
             window.__codeImageDrawnText = [];
+            window.__codeImageDrawnSegments = [];
+            window.__codeImageFillColors = [];
             class FakeClipboardItem {
                 constructor(items) {
                     this.items = items;
@@ -93,7 +95,16 @@ test.group('block rendering', () => {
             const nativeFillText = globalThis.CanvasRenderingContext2D.prototype.fillText;
             globalThis.CanvasRenderingContext2D.prototype.fillText = function(text, ...args) {
                 window.__codeImageDrawnText.push(String(text));
+                window.__codeImageDrawnSegments.push({
+                    color: String(this.fillStyle),
+                    text: String(text)
+                });
                 return nativeFillText.call(this, text, ...args);
+            };
+            const nativeFillRect = globalThis.CanvasRenderingContext2D.prototype.fillRect;
+            globalThis.CanvasRenderingContext2D.prototype.fillRect = function(...args) {
+                window.__codeImageFillColors.push(String(this.fillStyle));
+                return nativeFillRect.call(this, ...args);
             };
         });
         await page.fill('#ask-input', 'render every BLOCKS kind');
@@ -105,6 +116,7 @@ test.group('block rendering', () => {
         await page.waitForSelector('.source-code-line');
         assert.isFalse(await page.isDisabled('.source-code-image-button'));
         assert.equal(await page.locator('.source-code-image-button').evaluate((button) => getComputedStyle(button).cursor), 'pointer');
+        assert.equal(await page.locator('.source-code-image-menu').isHidden(), true);
 
         const httpRequests = [];
         page.on('request', (request) => {
@@ -113,12 +125,27 @@ test.group('block rendering', () => {
             }
         });
         await page.click('.source-code-image-button');
+        await page.waitForSelector('.source-code-image-menu');
+        assert.equal(await page.getAttribute('.source-code-image-button', 'aria-expanded'), 'true');
+        assert.equal((await page.evaluate(() => window.__clipboardWrites)).length, 0);
+        await page.click('.source-code-image-menu-item[data-theme="light"]');
         await page.waitForSelector('.code-image-dialog');
         assert.match((await page.textContent('.code-image-dialog-message')) || '', /Download code image\?/);
         const defaultImageText = await page.evaluate(() => window.__codeImageDrawnText.join(''));
         assert.include(defaultImageText, 'src/server.js:3-4');
         assert.include(defaultImageText, 'const app = new Hono();');
         assert.include(defaultImageText, 'app.get("/api/health", handler);');
+        const tokenColors = await page.evaluate(() => {
+            const wanted = ['const', 'Hono', 'get', '"/api/health"'];
+            return Object.fromEntries(wanted.map((token) => [
+                token,
+                window.__codeImageDrawnSegments.find((segment) => segment.text === token)?.color || ''
+            ]));
+        });
+        for(const token of ['const', 'Hono', 'get', '"/api/health"']) {
+            assert.isNotEmpty(tokenColors[token]);
+        }
+        assert.isAbove(new Set(Object.values(tokenColors)).size, 2);
 
         await page.click('.code-image-dialog-btn:not(.is-primary)');
         await page.waitForSelector('.code-image-dialog', {state: 'detached'});
@@ -129,6 +156,8 @@ test.group('block rendering', () => {
 
         await page.evaluate(() => {
             window.__codeImageDrawnText = [];
+            window.__codeImageDrawnSegments = [];
+            window.__codeImageFillColors = [];
             const line = document.querySelectorAll('.source-code-line')[4];
             const range = document.createRange();
             range.selectNodeContents(line);
@@ -138,12 +167,21 @@ test.group('block rendering', () => {
             document.dispatchEvent(new Event('selectionchange'));
         });
         await page.click('.source-code-image-button');
+        await page.waitForSelector('.source-code-image-menu');
+        await page.click('.source-code-image-menu-item[data-theme="dark"]');
         await page.waitForSelector('.code-image-dialog');
         const selectedImageText = await page.evaluate(() => window.__codeImageDrawnText.join(''));
         assert.include(selectedImageText, 'src/server.js:5');
         assert.include(selectedImageText, 'app.post("/api/ask", askHandler);');
         assert.notInclude(selectedImageText, 'const app = new Hono();');
         assert.notInclude(selectedImageText, 'app.get("/api/health", handler);');
+        const darkImage = await page.evaluate(() => ({
+            fillColors: window.__codeImageFillColors,
+            propertyColor: window.__codeImageDrawnSegments.find((segment) => segment.text === 'post')?.color || ''
+        }));
+        assert.include(darkImage.fillColors, '#12161b');
+        assert.isNotEmpty(darkImage.propertyColor);
+        assert.notEqual(darkImage.propertyColor, tokenColors.get);
 
         const clipboardWrites = await page.evaluate(() => window.__clipboardWrites);
         assert.equal(clipboardWrites.length, 2);
@@ -182,6 +220,8 @@ test.group('block rendering', () => {
         });
 
         await page.click('.source-code-image-button');
+        await page.waitForSelector('.source-code-image-menu');
+        await page.click('.source-code-image-menu-item[data-theme="light"]');
         await page.waitForSelector('.code-image-dialog');
         assert.match((await page.textContent('.code-image-dialog-title')) || '', /Code image failed/);
         assert.match((await page.textContent('.code-image-dialog-message')) || '', /could not encode the code image as PNG/i);

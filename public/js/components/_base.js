@@ -6,8 +6,8 @@
 //
 
 import {Marked, Renderer} from 'marked';
+import {codeImageFilename, renderCodeImage} from '@bandf/code-image';
 import {apiFetch} from '../app/team-context.js';
-import {codeImageFilename, renderCodeImage} from '../runtime/code-image.js';
 
 const HLJS_PROMISE_KEY = '__tracebook_hljs_promise__';
 const HLJS_INSTANCE_KEY = '__tracebook_hljs_instance__';
@@ -251,16 +251,35 @@ export async function openSourceFile(ref) {
     title.textContent = sourceModalTitle(ref);
     const actions = document.createElement('div');
     actions.className = 'mermaid-fullscreen-actions source-fullscreen-actions';
+    const codeImageAction = document.createElement('div');
+    codeImageAction.className = 'source-code-image-action';
     const codeImage = document.createElement('button');
     codeImage.type = 'button';
     codeImage.className = 'mermaid-fullscreen-download source-code-image-button';
     codeImage.textContent = 'Copy Image';
     codeImage.title = 'Copy the highlighted source excerpt to the clipboard';
+    codeImage.setAttribute('aria-haspopup', 'menu');
+    codeImage.setAttribute('aria-expanded', 'false');
+    const codeImageMenu = document.createElement('div');
+    codeImageMenu.className = 'source-code-image-menu';
+    codeImageMenu.setAttribute('role', 'menu');
+    codeImageMenu.setAttribute('aria-label', 'Copy image theme');
+    codeImageMenu.hidden = true;
+    for(const [theme, label] of [['light', 'Light'], ['dark', 'Dark']]) {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'source-code-image-menu-item';
+        item.dataset.theme = theme;
+        item.setAttribute('role', 'menuitem');
+        item.textContent = label;
+        codeImageMenu.appendChild(item);
+    }
+    codeImageAction.append(codeImage, codeImageMenu);
     const close = document.createElement('button');
     close.type = 'button';
     close.className = 'mermaid-fullscreen-close source-fullscreen-close';
     close.textContent = 'Collapse';
-    actions.append(codeImage, close);
+    actions.append(codeImageAction, close);
     bar.append(title, actions);
 
     const canvas = document.createElement('div');
@@ -278,6 +297,18 @@ export async function openSourceFile(ref) {
         resolveSourceReady = resolve;
     });
 
+    const closeCodeImageMenu = ({restoreFocus = false} = {}) => {
+        codeImageMenu.hidden = true;
+        codeImage.setAttribute('aria-expanded', 'false');
+        if(restoreFocus) {
+            codeImage.focus({preventScroll: true});
+        }
+    };
+    const openCodeImageMenu = () => {
+        codeImageMenu.hidden = false;
+        codeImage.setAttribute('aria-expanded', 'true');
+        codeImageMenu.querySelector('[role="menuitem"]')?.focus({preventScroll: true});
+    };
     const refreshCodeImageState = () => updateCodeImageButton(codeImage, canvas);
     const cleanup = () => {
         document.removeEventListener('keydown', onKey);
@@ -286,14 +317,56 @@ export async function openSourceFile(ref) {
         overlay.remove();
     };
     const onKey = (ev) => {
-        if(ev.key === 'Escape') cleanup();
+        if(ev.key !== 'Escape') {
+            return;
+        }
+        if(!codeImageMenu.hidden) {
+            ev.preventDefault();
+            closeCodeImageMenu({restoreFocus: true});
+            return;
+        }
+        cleanup();
     };
     close.addEventListener('click', cleanup);
     overlay.addEventListener('click', (ev) => {
+        if(!codeImageAction.contains(ev.target)) {
+            closeCodeImageMenu();
+        }
         if(ev.target === overlay) cleanup();
     });
     codeImage.addEventListener('click', () => {
-        copySelectedCodeImage({button: codeImage, canvas, sourceReady});
+        if(codeImageMenu.hidden) {
+            openCodeImageMenu();
+        } else {
+            closeCodeImageMenu({restoreFocus: true});
+        }
+    });
+    codeImageMenu.addEventListener('click', (ev) => {
+        const item = ev.target.closest('.source-code-image-menu-item');
+        if(!item) {
+            return;
+        }
+        closeCodeImageMenu();
+        copySelectedCodeImage({
+            button: codeImage,
+            canvas,
+            sourceReady,
+            theme: item.dataset.theme
+        });
+    });
+    codeImageMenu.addEventListener('keydown', (ev) => {
+        if(!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(ev.key)) {
+            return;
+        }
+        ev.preventDefault();
+        const items = [...codeImageMenu.querySelectorAll('[role="menuitem"]')];
+        const currentIndex = items.indexOf(document.activeElement);
+        const nextIndex = ev.key === 'Home'
+            ? 0
+            : ev.key === 'End'
+                ? items.length - 1
+                : (currentIndex + (ev.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+        items[nextIndex]?.focus({preventScroll: true});
     });
     document.addEventListener('keydown', onKey);
     document.addEventListener('selectionchange', refreshCodeImageState);
@@ -518,7 +591,7 @@ function updateCodeImageButton(button, canvas) {
         : 'Copy the highlighted source excerpt to the clipboard as an image';
 }
 
-async function copySelectedCodeImage({button, canvas, sourceReady}) {
+async function copySelectedCodeImage({button, canvas, sourceReady, theme}) {
     if(button.classList.contains('is-busy')) {
         return;
     }
@@ -540,7 +613,7 @@ async function copySelectedCodeImage({button, canvas, sourceReady}) {
             throw new Error('The highlighted source excerpt is unavailable.');
         }
         button.textContent = 'Generating';
-        blob = await renderCodeImage(selection, {highlighter: await loadHljs()});
+        blob = await renderCodeImage(selection, {theme: currentCodeImageTheme(theme)});
         filename = codeImageFilename(selection);
         button.textContent = 'Copying';
         await copyPngToClipboard(blob);
@@ -571,6 +644,14 @@ function resetCodeImageButton(button, canvas, text) {
     button.removeAttribute('aria-busy');
     button.textContent = text;
     updateCodeImageButton(button, canvas);
+}
+
+function currentCodeImageTheme(base = 'light') {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+        base,
+        fontFamily: styles.getPropertyValue('--mono').trim() || undefined
+    };
 }
 
 async function copyPngToClipboard(blob) {

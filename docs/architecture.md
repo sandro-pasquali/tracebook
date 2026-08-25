@@ -196,7 +196,7 @@ The browser presents grounded, inferred, and gap states as qualitative evidence 
 
 Network-last describes an ordering and ownership model, not an offline guarantee.
 
-Work that remains local includes repository scanning, parsing, graph construction, index storage, search fusion, local reranking, evidence selection, persistence, Mermaid rendering, and code-image generation. Code images are drawn and encoded as PNG entirely in browser Canvas; source is not sent to an image-rendering service.
+Work that remains local includes repository scanning, parsing, graph construction, index storage, search fusion, local reranking, evidence selection, persistence, Mermaid rendering, and code-image generation. The MIT-licensed `@bandf/code-image` browser package draws and encodes code images as PNG entirely in Canvas; source is not sent to an image-rendering service.
 
 Network access can occur in these cases:
 
@@ -222,7 +222,7 @@ The server streams semantic component data rather than server-rendered HTML. The
 
 *The source viewer keeps generated explanation reversible to the repository lines that support it.*
 
-Expanded code views always begin with the cited excerpt highlighted. `Copy Image` is therefore immediately usable: it exports that cited range unless the user makes another selection. The image renderer measures and wraps syntax-highlighted tokens, applies the active Tracebook palette, paints a high-resolution Canvas, and writes the resulting PNG to the clipboard or offers a local download fallback.
+Expanded code views always begin with the cited excerpt highlighted. `Copy Image` is therefore immediately usable: it opens a Light/Dark menu and exports the cited range in the chosen palette unless the user makes another selection. Tracebook passes the selected source and chosen theme to `@bandf/code-image`; the package owns the complete visual and syntax palettes, highlights with Highlight.js, measures and wraps the resulting tokens, and paints a high-resolution Canvas. Tracebook then writes the PNG to the clipboard or offers a local download fallback.
 
 Transformers.js is used only for text embeddings and text reranking. Because its Node entry imports Sharp even for text-only workloads, the root dependency resolution substitutes the small guard in `vendor/sharp-text-only`. The guard preserves the expected import shape and throws on image-pipeline use, avoiding an unused Sharp/libvips installation without pretending to implement image processing.
 
@@ -239,6 +239,7 @@ Transformers.js is used only for text embeddings and text reranking. Because its
 | Question planning and grounding | `src/planner/`, `src/intent-classifier.js` |
 | Trace, story, and brief persistence | `src/trace-store.js`, `src/story-store.js`, `src/change-brief/` |
 | Browser application and components | `public/js/app.js`, `public/js/app/`, `public/js/components/`, `public/js/runtime/` |
+| Browser code-image rendering | `@bandf/code-image` |
 | Retrieval and generation evaluation | `test/eval/`, `scripts/eval-matrix.js` |
 
 Continue with [Configuration](configuration.md) for execution settings, [Indexing](indexing.md) for corpus behavior, and the [retrieval](retrieval-eval.md) and [generation](generation-eval.md) evaluation references for quality measurement.

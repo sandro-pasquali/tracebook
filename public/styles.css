@@ -2601,6 +2601,65 @@ body.team-page {
     flex-shrink: 0;
 }
 
+.source-code-image-action {
+    position: relative;
+}
+
+.source-code-image-menu {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + 7px);
+    right: 0;
+    display: grid;
+    min-width: 112px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+.source-code-image-menu[hidden] {
+    display: none;
+}
+
+.source-code-image-menu-item {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-soft);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 7px 9px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.source-code-image-menu-item::before {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: #f4f1ea;
+    content: '';
+}
+
+.source-code-image-menu-item[data-theme="dark"]::before {
+    background: #12161b;
+}
+
+.source-code-image-menu-item:hover,
+.source-code-image-menu-item:focus-visible {
+    background: var(--bg-elev);
+    color: var(--accent-cool);
+    outline: none;
+}
+
 .mermaid-fullscreen-canvas {
     flex: 1;
     overflow: auto;
